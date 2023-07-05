@@ -1,0 +1,34 @@
+{
+  "expo": {
+    "name": "react-native-app-intro-animation",
+    "slug": "react-native-app-intro-animation",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": ["**/*"],
+    "ios": {
+      "config": {
+        "googleMapsApiKey": "AIzaSyAKFipNOUTn8LjisXG6Ei2IQiB1T2fb4xA"
+      },
+      "supportsTablet": true
+    },
+    "android": {
+      "googleMaps": {
+        "apiKey": "AIzaSyAKFipNOUTn8LjisXG6Ei2IQiB1T2fb4xA"
+      },
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
