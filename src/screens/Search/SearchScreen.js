@@ -2,8 +2,12 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { FlatList, Text, View, Image, TouchableHighlight, Pressable } from "react-native";
 import styles from "./styles";
 import MenuImage from "../../components/MenuImage/MenuImage";
-import { getCategoryName, getRecipesByRecipeName, getRecipesByCategoryName, getRecipesByIngredientName } from "../../data/MockDataAPI";
+import { getCategoryName, getRecipesByRecipeName, getRecipesByCategoryName, getRecipesByIngredientName, getProductByName } from "../../data/MockDataAPI";
 import { TextInput } from "react-native-gesture-handler";
+import { useQuery } from "react-query";
+import { loginServer } from "../../utils/login";
+import loginStore from "../../utils/store";
+import { Alert } from 'react-native';
 
 export default function SearchScreen(props) {
   const { navigation } = props;
@@ -29,7 +33,7 @@ export default function SearchScreen(props) {
             value={value}
           />
           <Pressable onPress={() => handleSearch("")}>
-          <Image style={styles.searchIcon} source={require("../../../assets/icons/close.png")} />
+            <Image style={styles.searchIcon} source={require("../../../assets/icons/close.png")} />
           </Pressable>
         </View>
       ),
@@ -37,20 +41,33 @@ export default function SearchScreen(props) {
     });
   }, [value]);
 
-  useEffect(() => {}, [value]);
+  useEffect(() => { }, [value]);
+
+
+  const query = useQuery({
+    queryFn: () => loginServer({ code }), // Envuelve la función en otra función
+    queryKey: ["getProductos"],
+    refetchInterval: 2000,
+  });
+
+  if (query.isLoading) return <Text>Cargando</Text>
+
+  if (query.isError) {
+    logout()
+    return;
+  }
+
+  const { code, logout } = loginStore();
+  const { productos } = query.data;
 
   const handleSearch = (text) => {
     setValue(text);
-    var recipeArray1 = getRecipesByRecipeName(text);
-    var recipeArray2 = getRecipesByCategoryName(text);
-    var recipeArray3 = getRecipesByIngredientName(text);
-    var aux = recipeArray1.concat(recipeArray2);
-    var recipeArray = [...new Set(aux)];
+    var recipeArray1 = getProductByName(productos, text );
 
     if (text == "") {
       setData([]);
     } else {
-      setData(recipeArray);
+      setData(recipeArray1);
     }
   };
 
@@ -58,19 +75,30 @@ export default function SearchScreen(props) {
     navigation.navigate("Recipe", { item });
   };
 
+  const mostrarAlertaMultilinea = ({ nombre, image, descripcion, precio, descuento }) => {
+    Alert.alert(
+      'Descripción',
+      `${nombre}\n${descripcion}\nPrecio sin descuento: ${precio}.\n\nPrecio con descuento: ${precio - (precio * descuento) / 100} (${descuento}%).`,
+      [
+        { text: 'Aceptar', onPress: () => console.log('Aceptar presionado') }
+      ],
+      { cancelable: false }
+    );
+  }
+
   const renderRecipes = ({ item }) => (
-    <TouchableHighlight    underlayColor="transparent"  onPress={() => onPressRecipe(item)}>
+    <TouchableHighlight underlayColor="transparent" onPress={() => mostrarAlertaMultilinea(item)}>
       <View style={styles.container}>
-        <Image style={styles.photo} source={{ uri: item.photo_url }} />
-        <Text style={styles.title}>{item.title}</Text>
-        <Text style={styles.category}>{getCategoryName(item.categoryId)}</Text>
+        <Image style={styles.photo} source={{ uri: item.image }} />
+        <Text style={styles.title}>{item.nombre}</Text>
+        <Text style={styles.category}>Precio: {item.precio}</Text>
       </View>
     </TouchableHighlight>
   );
 
   return (
     <View>
-      <FlatList vertical showsVerticalScrollIndicator={false} numColumns={2} data={data} renderItem={renderRecipes} keyExtractor={(item) => `${item.recipeId}`} />
+      <FlatList vertical showsVerticalScrollIndicator={false} numColumns={3} data={data} renderItem={renderRecipes} keyExtractor={(item) => `${item.id}`} />
     </View>
   );
 }

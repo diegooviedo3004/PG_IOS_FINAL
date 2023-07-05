@@ -129,3 +129,14 @@ export function getRecipesByRecipeName(recipeName) {
   });
   return recipesArray;
 }
+
+export function getProductByName(datos, recipeName) {
+  const nameUpper = recipeName.toUpperCase();
+  const recipesArray = [];
+  datos.map(data => {
+    if (data.nombre.toUpperCase().includes(nameUpper)) {
+      recipesArray.push(data);
+    }
+  });
+  return recipesArray;
+}

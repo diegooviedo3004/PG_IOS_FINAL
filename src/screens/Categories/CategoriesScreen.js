@@ -22,7 +22,7 @@ export default function CategoriesScreen(props) {
     return;
   }
 
-  const { productos } = query.data;
+  const { productos_5 } = query.data;
   
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -61,7 +61,7 @@ export default function CategoriesScreen(props) {
 
   return (
     <View>
-      <FlatList data={productos} renderItem={renderCategory} keyExtractor={(item) => `${item.id}`} />
+      <FlatList data={productos_5} renderItem={renderCategory} keyExtractor={(item) => `${item.id}`} />
     </View>
   );
 }
