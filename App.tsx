@@ -15,6 +15,7 @@ import {
   QueryClientProvider,
 } from 'react-query'
 import AppContainer from './src/navigations/AppNavigation';
+import { PaperProvider } from 'react-native-paper';
 
 const queryClient = new QueryClient()
 
@@ -47,7 +48,9 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       {code ? (
+        <PaperProvider>
          <AppContainer />
+        </PaperProvider>
       ) : (
         <SafeAreaProvider style={styles.container}>
           <NavigationContainer theme={theme}>

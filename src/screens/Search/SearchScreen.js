@@ -43,7 +43,8 @@ export default function SearchScreen(props) {
 
   useEffect(() => { }, [value]);
 
-
+  const { code, logout } = loginStore();
+  
   const query = useQuery({
     queryFn: () => loginServer({ code }), // Envuelve la función en otra función
     queryKey: ["getProductos"],
@@ -57,7 +58,7 @@ export default function SearchScreen(props) {
     return;
   }
 
-  const { code, logout } = loginStore();
+  
   const { productos } = query.data;
 
   const handleSearch = (text) => {

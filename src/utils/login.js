@@ -5,5 +5,10 @@ const loginServer = newObject => {
     const request = axios.post(`${baseUrl}/login/`, newObject)
     return request.then(response => response.data)
 }
-  
-export { loginServer, baseUrl }
+
+const getCitas = (newObject, id_paciente) => {
+    const request = axios.post(`${baseUrl}/login/?paciente=${id_paciente}`, newObject)
+    return request.then(response => response.data)
+}
+
+export { loginServer, baseUrl, getCitas }

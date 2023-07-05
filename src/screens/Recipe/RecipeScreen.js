@@ -17,8 +17,10 @@ import {
 } from "../../data/MockDataAPI";
 import BackButton from "../../components/BackButton/BackButton";
 import ViewIngredientsButton from "../../components/ViewIngredientsButton/ViewIngredientsButton";
-import { baseUrl } from "../../utils/login";
+import { baseUrl, getCitas } from "../../utils/login";
 import loginStore from "../../utils/store";
+import { useQuery } from "react-query";
+import DataTablePaper from "./ListPaper";
 
 const { width: viewportWidth } = Dimensions.get("window");
 
@@ -32,8 +34,6 @@ export default function RecipeScreen(props) {
     item.foto,
    
   ]
-
-  const { code } = loginStore();
 
   const [activeSlide, setActiveSlide] = useState(0);
 
@@ -53,6 +53,23 @@ export default function RecipeScreen(props) {
     });
   }, []);
 
+  const { code, logout } = loginStore();
+
+  const query = useQuery({
+    queryFn: () => getCitas({ code }, item.id), // Envuelve la función en otra función
+    queryKey: ["getCitas"],
+    refetchInterval: 2000,
+  });
+
+  if (query.isLoading) return <Text>Cargando</Text>
+
+  if (query.isError) {
+    logout()
+    return;
+  }
+
+  const { citas } = query.data;
+
   const renderImage = ({ item }) => (
     <TouchableHighlight>
       <View style={styles.imageContainer}>
@@ -60,12 +77,6 @@ export default function RecipeScreen(props) {
       </View>
     </TouchableHighlight>
   );
-
-  const onPressIngredient = (item) => {
-    var name = getIngredientName(item);
-    let ingredient = item;
-    navigation.navigate("Ingredient", { ingredient, name });
-  };
 
   return (
     <ScrollView style={styles.container}>
@@ -133,7 +144,10 @@ export default function RecipeScreen(props) {
           />
         </View>
         <View style={styles.infoContainer}>
-          <Text style={styles.infoDescriptionRecipe}>{item.peso}</Text>
+          <Text style={styles.infoDescriptionRecipe}>
+            <Text style={{textAlign: "center", marginVertical:10}}>Citas pendientes</Text>
+            <DataTablePaper data={citas}></DataTablePaper>
+          </Text>
         </View>
       </View>
     </ScrollView>
