@@ -48,6 +48,8 @@ const DataTablePaper = ({data}) => {
   if(data.length < 1) {
     return (
         <>
+          <Text style={{textAlign: "center", marginVertical:10}}>Citas pendientes</Text>
+
          <Text style={{marginVertical: 10, }}>
                 {'\n'}
                 {'\n'}
@@ -60,13 +62,13 @@ const DataTablePaper = ({data}) => {
   return (
     <DataTable>
     <DataTable.Header>
-      <DataTable.Title>Dessert</DataTable.Title>
-      <DataTable.Title numeric>Fat</DataTable.Title>
-      <DataTable.Title numeric>Fat</DataTable.Title>
+      <DataTable.Title>Motivo</DataTable.Title>
+      <DataTable.Title numeric>Fecha</DataTable.Title>
+      <DataTable.Title numeric>Hora</DataTable.Title>
     </DataTable.Header>
 
-    {data.slice(from, to).map((item) => (
-      <DataTable.Row key={item.key}>
+    {data.map((item) => (
+      <DataTable.Row key={item.id}>
         <DataTable.Cell>{item.motivo}</DataTable.Cell>
         <DataTable.Cell numeric>{item.fecha_cita}</DataTable.Cell>
         <DataTable.Cell numeric>{item.hora}</DataTable.Cell>

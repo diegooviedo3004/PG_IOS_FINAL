@@ -144,10 +144,8 @@ export default function RecipeScreen(props) {
           />
         </View>
         <View style={styles.infoContainer}>
-          <Text style={styles.infoDescriptionRecipe}>
-            <Text style={{textAlign: "center", marginVertical:10}}>Citas pendientes</Text>
             <DataTablePaper data={citas}></DataTablePaper>
-          </Text>
+
         </View>
       </View>
     </ScrollView>

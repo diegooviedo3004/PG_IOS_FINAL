@@ -47,10 +47,10 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      {code ? (
         <PaperProvider>
+
+      {code ? (
          <AppContainer />
-        </PaperProvider>
       ) : (
         <SafeAreaProvider style={styles.container}>
           <NavigationContainer theme={theme}>
@@ -59,6 +59,7 @@ export default function App() {
           <StatusBar style="auto" />
         </SafeAreaProvider>
       )}
+        </PaperProvider>
 
     </QueryClientProvider>
   );
